@@ -10,7 +10,7 @@ EduDish is a comprehensive, role-based school management system designed to stre
 - **Attendance Management**: Track student attendance efficiently.
 - **Assignment Management**: Organize and manage assignments with ease.
 - **Financial Management**: Manage school fees and staff salaries.
-- **Monorepo Architecture**: Built using Nx, featuring Node.js microservices and an Angular frontend.
+- **Monorepo Architecture**: Built using Nx, featuring Node.js microservices and an Angular frontend. 
 
 ## Tech Stack
 - **Frontend**: Angular
