@@ -3,26 +3,26 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "UI/overview/src",
+  "sourceRoot": "ui/overview/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/UI/overview",
-        "index": "UI/overview/src/index.html",
-        "browser": "UI/overview/src/main.ts",
+        "outputPath": "dist/ui/overview",
+        "index": "ui/overview/src/index.html",
+        "browser": "ui/overview/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "UI/overview/tsconfig.app.json",
+        "tsConfig": "ui/overview/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "UI/overview/public"
+            "input": "ui/overview/public"
           }
         ],
-        "styles": ["UI/overview/src/styles.scss"],
+        "styles": ["ui/overview/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -74,14 +74,14 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "UI/overview/jest.config.ts"
+        "jestConfig": "ui/overview/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "overview:build",
-        "staticFilePath": "dist/UI/overview/browser",
+        "staticFilePath": "dist/ui/overview/browser",
         "spa": true
       }
     }

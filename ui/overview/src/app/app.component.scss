@@ -1,0 +1,7 @@
+@import 'ui/libraries/shared-styles/edu-mixins.scss';
+
+main{
+    width: 100vw;
+    @include flexStyle();
+    padding: 20px;
+}
