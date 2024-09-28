@@ -1,28 +1,28 @@
 {
-  "name": "welcome",
+  "name": "overview",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "UI/welcome/src",
+  "sourceRoot": "UI/overview/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/UI/welcome",
-        "index": "UI/welcome/src/index.html",
-        "browser": "UI/welcome/src/main.ts",
+        "outputPath": "dist/UI/overview",
+        "index": "UI/overview/src/index.html",
+        "browser": "UI/overview/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "UI/welcome/tsconfig.app.json",
+        "tsConfig": "UI/overview/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "UI/welcome/public"
+            "input": "UI/overview/public"
           }
         ],
-        "styles": ["UI/welcome/src/styles.scss"],
+        "styles": ["UI/overview/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -53,10 +53,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "welcome:build:production"
+          "buildTarget": "overview:build:production"
         },
         "development": {
-          "buildTarget": "welcome:build:development"
+          "buildTarget": "overview:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -64,7 +64,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "welcome:build"
+        "buildTarget": "overview:build"
       }
     },
     "lint": {
@@ -74,14 +74,14 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "UI/welcome/jest.config.ts"
+        "jestConfig": "UI/overview/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "welcome:build",
-        "staticFilePath": "dist/UI/welcome/browser",
+        "buildTarget": "overview:build",
+        "staticFilePath": "dist/UI/overview/browser",
         "spa": true
       }
     }
