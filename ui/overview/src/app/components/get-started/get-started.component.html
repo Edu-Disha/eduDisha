@@ -1,3 +1,83 @@
 <div class="get-started">
-    
+    <div class="welcome">
+        {{tabSelected === 'SIGNIN' ? "Welcome Back!" : "Let's Get Started!"}}
+    </div>
+    <div class="container">
+        <div class="top">
+            <div class="tab" [ngClass]="{'selected' : tabSelected === 'SIGNIN'}" (click)="switchTab('SIGNIN')">Sign In</div>
+            <div class="tab" [ngClass]="{'selected' : tabSelected === 'SIGNUP'}" (click)="switchTab('SIGNUP')">Sign Up</div>
+        </div>
+        <div class="main">
+            <div>
+                <ng-container *ngIf="tabSelected === 'SIGNIN'; then signin; else signup"></ng-container>
+            </div>
+        </div>
+        <div class="footer" [ngClass]="{'disabled' : !isFormValid}">
+            <button (click)="submit()">{{tabSelected === 'SIGNIN' ? "Login" : "Let's Go"}}</button>
+        </div>
+    </div>
 </div>
+<ng-template #signin>
+    <form [formGroup]="signinForm">
+        <img src="signin.svg" alt="" class="enterFromLeft">
+        <div class="field">
+            <input type="text" placeholder="Email" formControlName="email">
+            <div *ngIf="signinForm.get('email')?.invalid && signinForm.get('email')?.['touched']">
+                <small *ngIf="signinForm.get('email')?.errors?.['email']">*Invalid email format.</small>
+            </div>
+        </div>
+        <div class="seprator">
+            <div></div>
+            <span>or</span>
+            <div></div>
+        </div>
+        <div class="field">
+            <input type="text" placeholder="Phone" formControlName="phone">
+            <div *ngIf="signinForm.get('phone')?.invalid && signinForm.get('phone')?.['touched']">
+                <small *ngIf="signinForm.get('phone')?.errors?.['pattern']">*Invalid phone number format.</small>
+            </div>
+        </div>
+        <div class="field">
+            <input type="password" placeholder="Password" formControlName="password">
+            <div *ngIf="signinForm.get('password')?.invalid && signinForm.get('password')?.['touched']">
+                <small *ngIf="signinForm.get('password')?.errors?.['required']">*Password is required.</small>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #signup>
+    <form [formGroup]="signupForm">
+        <img src="signup.svg" alt="" class="enterFromRight">
+        <div class="field">
+            <input type="text" formControlName="name" placeholder="Name">
+            <div *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.['touched']">
+                <small *ngIf="signupForm.get('name')?.errors?.['required']">*Name is required.</small>
+            </div>
+        </div>
+        <div class="field">
+            <input type="text" formControlName="email" placeholder="Email">
+            <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.['touched']">
+                <small *ngIf="signupForm.get('email')?.errors?.['required']">*Email is required.</small>
+                <small *ngIf="signupForm.get('email')?.errors?.['email']">*Invalid email format.</small>
+            </div>
+        </div>
+        <div class="field">
+            <input type="text" formControlName="phone" placeholder="Phone">
+            <div *ngIf="signupForm.get('phone')?.invalid && signupForm.get('phone')?.['touched']">
+                <small *ngIf="signupForm.get('phone')?.errors?.['required']">*Phone is required.</small>
+            </div>
+        </div>
+        <div class="field">
+            <input type="password" formControlName="password" placeholder="Password">
+            <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.['touched']">
+                <small *ngIf="signupForm.get('password')?.errors?.['required']">*Password is required.</small>
+            </div>
+        </div>
+        <div class="field">
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm Password">
+            <div *ngIf="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.['touched']">
+                <small *ngIf="signupForm.get('confirmPassword')?.errors?.['required']">*Confirm Password is required.</small>
+            </div>
+        </div>
+    </form>
+</ng-template>

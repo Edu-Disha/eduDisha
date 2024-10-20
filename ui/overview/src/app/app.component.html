@@ -1,3 +1,30 @@
+<header>
+    <div class="left">
+        <img src="EduDisha.png" alt="EduDisha">
+        <span class="gradient-text">EduDisha</span>
+    </div>
+    <div class="right">
+        <div class="get-started" (click)="getStarted()">Get Started</div>
+    </div>
+</header>
 <main>
-    <app-get-started></app-get-started>
+    <div class="top">
+        <div class="left">
+            <div class="carousel">
+                <div class="carousel-item">
+                    <img src="boy_desk_system.svg" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img src="fee-managment.svg" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img src="girl_analyze.svg" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img src="scrum_board.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+<app-get-started *ngIf="showGetStarted" (onClose)="getStarted()"></app-get-started>
