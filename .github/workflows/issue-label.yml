@@ -1,0 +1,59 @@
+name: Assign Task ID based on Label
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  assign_task_id:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check if the issue has a matching label
+      id: issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          // Mapping labels to task ID prefixes
+          const labels = context.payload.issue.labels.map(label => label.name);
+          const prefixMap = {
+            "Frontend Backlog": "FB",
+            "Backend Backlog": "BB",
+            "Devops Request": "DR",
+            "Design Backlog": "DB",
+            "Software Bug": "SB"
+          };
+          
+          let prefix = null;
+          
+          // Check the issue's labels and assign the matching prefix
+          for (const label of labels) {
+            if (prefixMap[label]) {
+              prefix = prefixMap[label];
+              break;
+            }
+          }
+
+          if (!prefix) {
+            // No matching label found, exit the workflow
+            return;
+          }
+
+          // Format the issue number to 3 digits, e.g., 001
+          const issueNumber = context.payload.issue.number.toString().padStart(3, '0');
+          const taskId = `${prefix}-${issueNumber}`;
+
+          // Add the task ID as a comment to the issue
+          await github.issues.createComment({
+            issue_number: context.payload.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `Task ID: ${taskId}`
+          });
+
+          // Update the issue title to include the task ID
+          await github.issues.update({
+            issue_number: context.payload.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `${taskId}: ${context.payload.issue.title}`
+          });
