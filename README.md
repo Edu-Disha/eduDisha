@@ -22,3 +22,6 @@ EduDish is a comprehensive, role-based school management system designed to stre
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/edudish.git
+
+
+for testing purpost by Tushar Chand Thakur    // Todo: Remove this
