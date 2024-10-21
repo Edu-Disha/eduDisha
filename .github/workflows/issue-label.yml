@@ -10,7 +10,7 @@ jobs:
     steps:
     - name: Check if the issue has a matching label
       id: issue
-      uses: actions/github-script@6.2.0
+      uses: actions/github-script@v6.2.0
       with:
         script: |
           // Mapping labels to task ID prefixes
