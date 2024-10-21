@@ -8,52 +8,58 @@ jobs:
   assign_task_id:
     runs-on: ubuntu-latest
     steps:
-    - name: Check if the issue has a matching label
+    - name: Get issue labels
       id: issue
-      uses: actions/github-script@v6.2.0
+      uses: actions/github-issue-labels@v1.0
       with:
-        script: |
-          // Mapping labels to task ID prefixes
-          const labels = context.payload.issue.labels.map(label => label.name);
-          const prefixMap = {
-            "Frontend Backlog": "FB",
-            "Backend Backlog": "BB",
-            "Devops Request": "DR",
-            "Design Backlog": "DB",
-            "Software Bug": "SB"
-          };
-          
-          let prefix = null;
-          
-          // Check the issue's labels and assign the matching prefix
-          for (const label of labels) {
-            if (prefixMap[label]) {
-              prefix = prefixMap[label];
-              break;
-            }
-          }
+        token: ${{ secrets.GITHUB_TOKEN }}
 
-          if (!prefix) {
-            // No matching label found, exit the workflow
-            return;
-          }
+    - name: Check and assign task ID
+      run: |
+        labels=$(echo "${{ steps.issue.outputs.labels }}")
+        echo "Labels: $labels"
+        issue_number=${{ github.event.issue.number }}
+        issue_title="${{ github.event.issue.title }}"
+        repo_owner="${{ github.repository_owner }}"
+        repo_name="${{ github.event.repository.name }}"
 
-          // Format the issue number to 3 digits, e.g., 001
-          const issueNumber = context.payload.issue.number.toString().padStart(3, '0');
-          const taskId = `${prefix}-${issueNumber}`;
+        prefix=""
 
-          // Add the task ID as a comment to the issue
-          await github.issues.createComment({
-            issue_number: context.payload.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `Task ID: ${taskId}`
-          });
+        case "$labels" in
+          *Frontend\ Backlog*)
+            prefix="FB"
+            ;;
+          *Backend\ Backlog*)
+            prefix="BB"
+            ;;
+          *Devops\ Request*)
+            prefix="DR"
+            ;;
+          *Design\ Backlog*)
+            prefix="DB"
+            ;;
+          *Software\ Bug*)
+            prefix="SB"
+            ;;
+        esac
 
-          // Update the issue title to include the task ID
-          await github.issues.update({
-            issue_number: context.payload.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `${taskId}: ${context.payload.issue.title}`
-          });
+        if [ -z "$prefix" ]; then
+          echo "No matching label found. Exiting."
+          exit 0
+        fi
+
+        task_id="${prefix}-$(printf "%03d" $issue_number)"
+
+        # Add the task ID as a comment
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${repo_owner}/${repo_name}/issues/${issue_number}/comments \
+          -d "{\"body\": \"Task ID: ${task_id}\"}"
+
+        # Update the issue title to include the task ID
+        curl -X PATCH \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${repo_owner}/${repo_name}/issues/${issue_number} \
+          -d "{\"title\": \"${task_id}: ${issue_title}\"}"
